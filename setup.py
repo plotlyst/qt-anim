@@ -22,12 +22,12 @@ REQUIREMENTS: dict = {
 }
 
 setup(
-    name='',
+    name='qt-anim',
     version='0.1.0',
 
     author='Zsolt Kovari',
     author_email='',
-    description='',
+    description='Qt Property Animations',
     long_description=LONG_DESCRIPTION,
     long_description_content_type='text/markdown',
     url='',
