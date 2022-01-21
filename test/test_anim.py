@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QPushButton, QWidget, QHBoxLayout
+from qtpy.QtWidgets import QPushButton, QWidget, QHBoxLayout
 
 from qtanim import fade_in, fade_out, shake, flash
 

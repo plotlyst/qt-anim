@@ -1,6 +1,6 @@
 import sys
 
-from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QVBoxLayout
+from qtpy.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QVBoxLayout
 
 import qtanim
 
