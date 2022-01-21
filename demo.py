@@ -1,5 +1,6 @@
 import sys
 
+import qtawesome
 from qtpy.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QVBoxLayout
 
 import qtanim
@@ -15,10 +16,16 @@ class MainWindow(QMainWindow):
         self.widget.setLayout(QVBoxLayout())
 
         self.btnFlash = QPushButton('Flash')
+        self.btnFlash.setIcon(qtawesome.icon('fa5s.cog'))
         self.btnShake = QPushButton('Shake')
         self.btnFadeIn = QPushButton('Fade in')
         self.btnFadeOut = QPushButton('Fade out')
         self.btnPlay = QPushButton('Play all')
+        self.btnGlow = QPushButton('Glow')
+        self.btnShine = QPushButton('Shine')
+        self.btnShine.setDisabled(True)
+        self.btnPulse = QPushButton('Pulse')
+
         font = self.btnPlay.font()
         font.setBold(True)
         self.btnPlay.setFont(font)
@@ -28,6 +35,10 @@ class MainWindow(QMainWindow):
         self.widget.layout().addWidget(self.btnShake)
         self.widget.layout().addWidget(self.btnFadeIn)
         self.widget.layout().addWidget(self.btnFadeOut)
+        self.widget.layout().addWidget(self.btnGlow)
+        self.widget.layout().addWidget(self.btnShine)
+        self.widget.layout().addWidget(self.btnPulse)
+
         self.widget.layout().addWidget(self.btnPlay)
         self.widget.layout().addWidget(self.btnRevert)
 
@@ -35,6 +46,10 @@ class MainWindow(QMainWindow):
         self.btnShake.clicked.connect(lambda: qtanim.shake(self.btnShake))
         self.btnFadeIn.clicked.connect(lambda: qtanim.fade_in(self.btnFadeIn))
         self.btnFadeOut.clicked.connect(lambda: qtanim.fade_out(self.btnFadeOut))
+        self.btnGlow.clicked.connect(lambda: qtanim.glow(self.btnGlow))
+        self.btnShine.clicked.connect(lambda: qtanim.shine(self.btnShine))
+        self.btnPulse.clicked.connect(lambda: qtanim.pulse(self.btnPulse))
+
         self.btnPlay.clicked.connect(self._play)
         self.btnRevert.clicked.connect(lambda: qtanim.fade_in(self.btnFadeOut))
 
@@ -43,6 +58,9 @@ class MainWindow(QMainWindow):
         self.btnShake.click()
         self.btnFadeIn.click()
         self.btnFadeOut.click()
+        self.btnGlow.click()
+        self.btnShine.click()
+        self.btnPulse.click()
 
 
 if __name__ == '__main__':
