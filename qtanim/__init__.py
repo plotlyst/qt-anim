@@ -108,7 +108,6 @@ def glow(widget: QWidget, duration: int = 200, loop: int = 1,
     sequence.addAnimation(end_animation)
     sequence.setLoopCount(loop)
 
-    sequence.finished.connect(lambda: effect.setBlurRadius(0))
     sequence.start(QPropertyAnimation.DeletionPolicy.DeleteWhenStopped)
 
     return sequence
@@ -159,7 +158,6 @@ def pulse(widget: QWidget, duration: int = 400, loop: int = 3, color: QColor = Q
     size.setWidth(size.width() + 4)
     size.setHeight(size.height() + 4)
     size_animation.setEndValue(size)
-    size_animation.finished.connect(lambda: widget.setMinimumSize(original_size))
 
     reverse_size_animation = reverse(size_animation)
     reverse_size_animation.setStartValue(size)
