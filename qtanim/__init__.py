@@ -87,7 +87,7 @@ def fade_out(widget: QWidget, duration: int = 250) -> QAbstractAnimation:
     return animation
 
 
-def glow(widget: QWidget, duration: int = 200, loop: int = 1,
+def glow(widget: QWidget, duration: int = 200, radius: int = 8, loop: int = 1,
          color: QColor = QColor(Qt.red)) -> QAbstractAnimation:
     effect = QGraphicsDropShadowEffect(widget)
     effect.setBlurRadius(0)
@@ -100,7 +100,7 @@ def glow(widget: QWidget, duration: int = 200, loop: int = 1,
     animation = QPropertyAnimation(effect, b'blurRadius', widget)
     animation.setDuration(duration)
     animation.setStartValue(0)
-    animation.setEndValue(8)
+    animation.setEndValue(radius)
 
     end_animation = reverse(animation)
 
