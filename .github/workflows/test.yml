@@ -27,11 +27,15 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install pytest-xvfb
-          pip install -e .[dev]
+          pip install -e .[test]
           pip install ${{ matrix.pyqt }}
       - name: Test with pytest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          ./test.sh
+          ./tst.sh
+          pip install coveralls
+          coveralls --service=github
 
   qa:
     runs-on: ubuntu-latest
