@@ -60,6 +60,7 @@ def shake(widget: QWidget, distance: int = 5, loop: int = 3) -> QAbstractAnimati
 
 def fade_in(widget: QWidget, duration: int = 250) -> QAbstractAnimation:
     effect = QGraphicsOpacityEffect(widget)
+    widget.setVisible(True)
     widget.setGraphicsEffect(effect)
 
     animation = QPropertyAnimation(effect, b'opacity', widget)
@@ -67,7 +68,6 @@ def fade_in(widget: QWidget, duration: int = 250) -> QAbstractAnimation:
     animation.setStartValue(0)
     animation.setEndValue(1)
     animation.setEasingCurve(QEasingCurve.Type.InBack)
-    widget.setVisible(True)
     animation.start(QPropertyAnimation.DeletionPolicy.DeleteWhenStopped)
 
     return animation
