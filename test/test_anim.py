@@ -13,7 +13,11 @@ def test_fade(qtbot):
     widget.show()
 
     fade_out(btn)
+    qtbot.wait(300)
+    assert btn.isHidden()
     fade_in(btn)
+    qtbot.wait(250)
+    assert btn.isVisible()
 
 
 def test_shake(qtbot):
@@ -22,6 +26,7 @@ def test_shake(qtbot):
     btn.show()
 
     shake(btn)
+    qtbot.wait(250)
 
 
 def test_flash(qtbot):
@@ -30,6 +35,7 @@ def test_flash(qtbot):
     btn.show()
 
     flash(btn)
+    qtbot.wait(250)
 
 
 def test_glow(qtbot):
@@ -38,6 +44,7 @@ def test_glow(qtbot):
     btn.show()
 
     glow(btn)
+    qtbot.wait(250)
 
 
 def test_pulse(qtbot):
@@ -46,3 +53,4 @@ def test_pulse(qtbot):
     btn.show()
 
     pulse(btn)
+    qtbot.wait(250)
