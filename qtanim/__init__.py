@@ -73,7 +73,7 @@ def fade_in(widget: QWidget, duration: int = 250) -> QAbstractAnimation:
     return animation
 
 
-def fade_out(widget: QWidget, duration: int = 250) -> QAbstractAnimation:
+def fade_out(widget: QWidget, duration: int = 250, hide_if_finished: bool = True) -> QAbstractAnimation:
     effect = QGraphicsOpacityEffect(widget)
     widget.setGraphicsEffect(effect)
 
@@ -81,8 +81,10 @@ def fade_out(widget: QWidget, duration: int = 250) -> QAbstractAnimation:
     animation.setDuration(duration)
     animation.setStartValue(1)
     animation.setEndValue(0)
+
+    if hide_if_finished:
+        animation.finished.connect(lambda: widget.setHidden(True))
     animation.start(QPropertyAnimation.DeletionPolicy.DeleteWhenStopped)
-    animation.finished.connect(lambda: widget.setHidden(True))
 
     return animation
 
