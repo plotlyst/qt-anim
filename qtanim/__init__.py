@@ -115,6 +115,26 @@ def glow(widget: QWidget, duration: int = 200, radius: int = 8, loop: int = 1,
     return sequence
 
 
+def colorize(widget, duration: int = 200, strength: float = 0.5, color: QColor = QColor(Qt.red)):
+    effect = QGraphicsColorizeEffect(widget)
+    effect.setColor(color)
+    widget.setGraphicsEffect(effect)
+
+    sequence = QSequentialAnimationGroup(widget)
+
+    animation = QPropertyAnimation(effect, b'strength', widget)
+    animation.setDuration(duration)
+    animation.setStartValue(0)
+    animation.setEndValue(strength)
+
+    end_animation = reverse(animation)
+
+    sequence.addAnimation(animation)
+    sequence.addAnimation(end_animation)
+
+    sequence.start(QPropertyAnimation.DeletionPolicy.DeleteWhenStopped)
+
+
 # class PaletteColorInterpolation(QWidget):
 #     def __init__(self, palette: QPalette, widget: QWidget):
 #         super(PaletteColorInterpolation, self).__init__(widget)

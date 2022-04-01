@@ -1,6 +1,6 @@
 from qtpy.QtWidgets import QPushButton, QWidget, QHBoxLayout
 
-from qtanim import fade_in, fade_out, shake, flash, glow, pulse
+from qtanim import fade_in, fade_out, shake, flash, glow, pulse, colorize
 
 
 def test_fade(qtbot):
@@ -53,4 +53,13 @@ def test_pulse(qtbot):
     btn.show()
 
     pulse(btn)
+    qtbot.wait(250)
+
+
+def test_colorize(qtbot):
+    btn = QPushButton('Test button')
+    qtbot.addWidget(btn)
+    btn.show()
+
+    colorize(btn)
     qtbot.wait(250)

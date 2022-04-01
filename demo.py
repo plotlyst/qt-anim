@@ -22,8 +22,8 @@ class MainWindow(QMainWindow):
         self.btnFadeOut = QPushButton('Fade out')
         self.btnPlay = QPushButton('Play all')
         self.btnGlow = QPushButton('Glow')
-        self.btnShine = QPushButton('Shine')
-        self.btnShine.setDisabled(True)
+        self.btnColorize = QPushButton('Colorize')
+        self.btnColorize.setIcon(qtawesome.icon('fa5s.cog'))
         self.btnPulse = QPushButton('Pulse')
 
         font = self.btnPlay.font()
@@ -36,7 +36,7 @@ class MainWindow(QMainWindow):
         self.widget.layout().addWidget(self.btnFadeIn)
         self.widget.layout().addWidget(self.btnFadeOut)
         self.widget.layout().addWidget(self.btnGlow)
-        self.widget.layout().addWidget(self.btnShine)
+        self.widget.layout().addWidget(self.btnColorize)
         self.widget.layout().addWidget(self.btnPulse)
 
         self.widget.layout().addWidget(self.btnPlay)
@@ -47,7 +47,7 @@ class MainWindow(QMainWindow):
         self.btnFadeIn.clicked.connect(lambda: qtanim.fade_in(self.btnFadeIn))
         self.btnFadeOut.clicked.connect(lambda: qtanim.fade_out(self.btnFadeOut))
         self.btnGlow.clicked.connect(lambda: qtanim.glow(self.btnGlow))
-        self.btnShine.clicked.connect(lambda: qtanim.shine(self.btnShine))
+        self.btnColorize.clicked.connect(lambda: qtanim.colorize(self.btnColorize, duration=1000, strength=0.8))
         self.btnPulse.clicked.connect(lambda: qtanim.pulse(self.btnPulse))
 
         self.btnPlay.clicked.connect(self._play)
@@ -59,7 +59,7 @@ class MainWindow(QMainWindow):
         self.btnFadeIn.click()
         self.btnFadeOut.click()
         self.btnGlow.click()
-        self.btnShine.click()
+        self.btnColorize.click()
         self.btnPulse.click()
 
 
@@ -67,7 +67,6 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = MainWindow()
 
-    window.move(QApplication.desktop().screen().rect().center())
     window.show()
 
     app.exec()
