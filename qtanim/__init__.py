@@ -115,7 +115,7 @@ def glow(widget: QWidget, duration: int = 200, radius: int = 8, loop: int = 1,
     return sequence
 
 
-def colorize(widget, duration: int = 200, strength: float = 0.5, color: QColor = QColor(Qt.red)):
+def colorize(widget, duration: int = 200, strength: float = 0.5, loop: int = 1, color: QColor = QColor(Qt.red)):
     effect = QGraphicsColorizeEffect(widget)
     effect.setColor(color)
     widget.setGraphicsEffect(effect)
@@ -131,6 +131,7 @@ def colorize(widget, duration: int = 200, strength: float = 0.5, color: QColor =
 
     sequence.addAnimation(animation)
     sequence.addAnimation(end_animation)
+    sequence.setLoopCount(loop)
 
     sequence.start(QPropertyAnimation.DeletionPolicy.DeleteWhenStopped)
 
