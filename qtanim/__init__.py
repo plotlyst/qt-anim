@@ -9,7 +9,8 @@ from qtanim.util import reverse
 
 
 def flash(widget: QWidget, start_color: QColor = QColor(Qt.blue),
-          end_color: QColor = QColor(Qt.red)) -> QAbstractAnimation:
+          end_color: QColor = QColor(Qt.red),
+          deletion=QPropertyAnimation.DeletionPolicy.KeepWhenStopped) -> QAbstractAnimation:
     effect = QGraphicsColorizeEffect(widget)
     widget.setGraphicsEffect(effect)
 
@@ -19,13 +20,14 @@ def flash(widget: QWidget, start_color: QColor = QColor(Qt.blue),
     animation.setStartValue(start_color)
     animation.setEndValue(end_color)
 
-    animation.start(QPropertyAnimation.DeletionPolicy.DeleteWhenStopped)
+    animation.start(deletion)
     animation.finished.connect(lambda: widget.setGraphicsEffect(None))
 
     return animation
 
 
-def shake(widget: QWidget, distance: int = 5, loop: int = 3) -> QAbstractAnimation:
+def shake(widget: QWidget, distance: int = 5, loop: int = 3,
+          deletion=QPropertyAnimation.DeletionPolicy.KeepWhenStopped) -> QAbstractAnimation:
     original = widget.geometry()
     left_geo: QRect = widget.geometry()
     left_geo.setX(left_geo.x() - distance)
@@ -53,12 +55,13 @@ def shake(widget: QWidget, distance: int = 5, loop: int = 3) -> QAbstractAnimati
     sequence.addAnimation(shake_animation)
     sequence.addAnimation(end_animation)
 
-    sequence.start(QPropertyAnimation.DeletionPolicy.DeleteWhenStopped)
+    sequence.start(deletion)
 
     return sequence
 
 
-def fade_in(widget: QWidget, duration: int = 250) -> QAbstractAnimation:
+def fade_in(widget: QWidget, duration: int = 250,
+            deletion=QPropertyAnimation.DeletionPolicy.KeepWhenStopped) -> QAbstractAnimation:
     effect = QGraphicsOpacityEffect(widget)
     widget.setVisible(True)
     widget.setGraphicsEffect(effect)
@@ -68,12 +71,13 @@ def fade_in(widget: QWidget, duration: int = 250) -> QAbstractAnimation:
     animation.setStartValue(0)
     animation.setEndValue(1)
     animation.setEasingCurve(QEasingCurve.Type.InBack)
-    animation.start(QPropertyAnimation.DeletionPolicy.DeleteWhenStopped)
+    animation.start(deletion)
 
     return animation
 
 
-def fade_out(widget: QWidget, duration: int = 250, hide_if_finished: bool = True) -> QAbstractAnimation:
+def fade_out(widget: QWidget, duration: int = 250, hide_if_finished: bool = True,
+             deletion=QPropertyAnimation.DeletionPolicy.KeepWhenStopped) -> QAbstractAnimation:
     effect = QGraphicsOpacityEffect(widget)
     widget.setGraphicsEffect(effect)
 
@@ -84,13 +88,14 @@ def fade_out(widget: QWidget, duration: int = 250, hide_if_finished: bool = True
 
     if hide_if_finished:
         animation.finished.connect(lambda: widget.setHidden(True))
-    animation.start(QPropertyAnimation.DeletionPolicy.DeleteWhenStopped)
+    animation.start(deletion)
 
     return animation
 
 
 def glow(widget: QWidget, duration: int = 200, radius: int = 8, loop: int = 1,
-         color: QColor = QColor(Qt.red)) -> QAbstractAnimation:
+         color: QColor = QColor(Qt.red),
+         deletion=QPropertyAnimation.DeletionPolicy.KeepWhenStopped) -> QAbstractAnimation:
     effect = QGraphicsDropShadowEffect(widget)
     effect.setBlurRadius(0)
     effect.setOffset(0)
@@ -110,12 +115,13 @@ def glow(widget: QWidget, duration: int = 200, radius: int = 8, loop: int = 1,
     sequence.addAnimation(end_animation)
     sequence.setLoopCount(loop)
 
-    sequence.start(QPropertyAnimation.DeletionPolicy.DeleteWhenStopped)
+    sequence.start(deletion)
 
     return sequence
 
 
-def colorize(widget, duration: int = 200, strength: float = 0.5, loop: int = 1, color: QColor = QColor(Qt.red)):
+def colorize(widget, duration: int = 200, strength: float = 0.5, loop: int = 1, color: QColor = QColor(Qt.red),
+             deletion=QPropertyAnimation.DeletionPolicy.KeepWhenStopped) -> QAbstractAnimation:
     effect = QGraphicsColorizeEffect(widget)
     effect.setColor(color)
     widget.setGraphicsEffect(effect)
@@ -133,7 +139,9 @@ def colorize(widget, duration: int = 200, strength: float = 0.5, loop: int = 1, 
     sequence.addAnimation(end_animation)
     sequence.setLoopCount(loop)
 
-    sequence.start(QPropertyAnimation.DeletionPolicy.DeleteWhenStopped)
+    sequence.start(deletion)
+
+    return sequence
 
 
 # class PaletteColorInterpolation(QWidget):
@@ -152,7 +160,8 @@ def colorize(widget, duration: int = 200, strength: float = 0.5, loop: int = 1, 
 #         self.widget.setPalette(self.palette)
 
 
-def pulse(widget: QWidget, duration: int = 400, loop: int = 3, color: QColor = QColor(Qt.red)) -> QAbstractAnimation:
+def pulse(widget: QWidget, duration: int = 400, loop: int = 3, color: QColor = QColor(Qt.red),
+          deletion=QPropertyAnimation.DeletionPolicy.KeepWhenStopped) -> QAbstractAnimation:
     effect = QGraphicsDropShadowEffect(widget)
     effect.setBlurRadius(0)
     effect.setOffset(0)
@@ -213,7 +222,7 @@ def pulse(widget: QWidget, duration: int = 400, loop: int = 3, color: QColor = Q
     parallel.addAnimation(position_sequence)
     parallel.setLoopCount(loop)
 
-    parallel.start(QPropertyAnimation.DeletionPolicy.DeleteWhenStopped)
+    parallel.start(deletion)
 
     return parallel
 
@@ -237,6 +246,6 @@ def pulse(widget: QWidget, duration: int = 400, loop: int = 3, color: QColor = Q
 # animation.setDuration(250)
 # animation.setStartValue(QColor(Qt.GlobalColor.blue))
 # animation.setEndValue(QColor(Qt.GlobalColor.red))
-# animation.start(QPropertyAnimation.DeletionPolicy.DeleteWhenStopped)
+# animation.start(QPropertyAnimation.DeletionPolicy.KeepWhenStopped)
 #
 # return animation
