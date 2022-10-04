@@ -3,6 +3,11 @@ from qtpy.QtWidgets import QPushButton, QWidget, QHBoxLayout
 from qtanim import fade_in, fade_out, shake, flash, glow, pulse, colorize
 
 
+def wait_for_finished(qtbot, anim, timeout: int = 3000):
+    with qtbot.waitSignal(anim.finished, timeout=timeout):
+        pass
+
+
 def test_fade(qtbot):
     widget = QWidget()
     widget.setLayout(QHBoxLayout())
@@ -12,11 +17,12 @@ def test_fade(qtbot):
     qtbot.addWidget(widget)
     widget.show()
 
-    fade_out(btn)
-    qtbot.wait(300)
+    anim = fade_out(btn)
+    wait_for_finished(qtbot, anim)
     assert btn.isHidden()
-    fade_in(btn)
-    qtbot.wait(250)
+
+    anim = fade_in(btn)
+    wait_for_finished(qtbot, anim)
     assert btn.isVisible()
 
 
@@ -25,8 +31,8 @@ def test_shake(qtbot):
     qtbot.addWidget(btn)
     btn.show()
 
-    shake(btn)
-    qtbot.wait(250)
+    anim = shake(btn)
+    wait_for_finished(qtbot, anim, 10000)
 
 
 def test_flash(qtbot):
@@ -34,8 +40,8 @@ def test_flash(qtbot):
     qtbot.addWidget(btn)
     btn.show()
 
-    flash(btn)
-    qtbot.wait(250)
+    anim = flash(btn)
+    wait_for_finished(qtbot, anim)
 
 
 def test_glow(qtbot):
@@ -43,8 +49,8 @@ def test_glow(qtbot):
     qtbot.addWidget(btn)
     btn.show()
 
-    glow(btn)
-    qtbot.wait(250)
+    anim = glow(btn)
+    wait_for_finished(qtbot, anim)
 
 
 def test_pulse(qtbot):
@@ -52,8 +58,8 @@ def test_pulse(qtbot):
     qtbot.addWidget(btn)
     btn.show()
 
-    pulse(btn)
-    qtbot.wait(250)
+    anim = pulse(btn)
+    wait_for_finished(qtbot, anim)
 
 
 def test_colorize(qtbot):
@@ -61,5 +67,5 @@ def test_colorize(qtbot):
     qtbot.addWidget(btn)
     btn.show()
 
-    colorize(btn)
-    qtbot.wait(250)
+    anim = colorize(btn)
+    wait_for_finished(qtbot, anim)
