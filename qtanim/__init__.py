@@ -1,4 +1,4 @@
-from qtpy.QtCore import QPropertyAnimation
+from qtpy.QtCore import QPropertyAnimation, QObject
 from qtpy.QtCore import Qt, QRect, QSequentialAnimationGroup, QEasingCurve, QParallelAnimationGroup, \
     QAbstractAnimation
 from qtpy.QtGui import QColor
@@ -62,11 +62,14 @@ def shake(widget: QWidget, distance: int = 5, loop: int = 3,
 
 def fade_in(widget: QWidget, duration: int = 250,
             deletion=QPropertyAnimation.DeletionPolicy.KeepWhenStopped) -> QAbstractAnimation:
-    effect = QGraphicsOpacityEffect(widget)
+    effect = QGraphicsOpacityEffect()
+    __set_parent_if_qobj(effect, widget)
+
     widget.setVisible(True)
     widget.setGraphicsEffect(effect)
 
-    animation = QPropertyAnimation(effect, b'opacity', widget)
+    animation = QPropertyAnimation(effect, b'opacity')
+    __set_parent_if_qobj(animation, widget)
     animation.setDuration(duration)
     animation.setStartValue(0)
     animation.setEndValue(1)
@@ -78,10 +81,12 @@ def fade_in(widget: QWidget, duration: int = 250,
 
 def fade_out(widget: QWidget, duration: int = 250, hide_if_finished: bool = True,
              deletion=QPropertyAnimation.DeletionPolicy.KeepWhenStopped) -> QAbstractAnimation:
-    effect = QGraphicsOpacityEffect(widget)
+    effect = QGraphicsOpacityEffect()
+    __set_parent_if_qobj(effect, widget)
     widget.setGraphicsEffect(effect)
 
-    animation = QPropertyAnimation(effect, b'opacity', widget)
+    animation = QPropertyAnimation(effect, b'opacity')
+    __set_parent_if_qobj(animation, widget)
     animation.setDuration(duration)
     animation.setStartValue(1)
     animation.setEndValue(0)
@@ -96,7 +101,8 @@ def fade_out(widget: QWidget, duration: int = 250, hide_if_finished: bool = True
 def glow(widget: QWidget, duration: int = 200, radius: int = 8, loop: int = 1,
          color: QColor = QColor(Qt.red),
          deletion=QPropertyAnimation.DeletionPolicy.KeepWhenStopped) -> QAbstractAnimation:
-    effect = QGraphicsDropShadowEffect(widget)
+    effect = QGraphicsDropShadowEffect()
+    __set_parent_if_qobj(effect, widget)
     effect.setBlurRadius(0)
     effect.setOffset(0)
     effect.setColor(color)
@@ -104,7 +110,8 @@ def glow(widget: QWidget, duration: int = 200, radius: int = 8, loop: int = 1,
 
     sequence = QSequentialAnimationGroup(widget)
 
-    animation = QPropertyAnimation(effect, b'blurRadius', widget)
+    animation = QPropertyAnimation(effect, b'blurRadius')
+    __set_parent_if_qobj(animation, widget)
     animation.setDuration(duration)
     animation.setStartValue(0)
     animation.setEndValue(radius)
@@ -122,13 +129,15 @@ def glow(widget: QWidget, duration: int = 200, radius: int = 8, loop: int = 1,
 
 def colorize(widget, duration: int = 200, strength: float = 0.5, loop: int = 1, color: QColor = QColor(Qt.red),
              deletion=QPropertyAnimation.DeletionPolicy.KeepWhenStopped) -> QAbstractAnimation:
-    effect = QGraphicsColorizeEffect(widget)
+    effect = QGraphicsColorizeEffect()
+    __set_parent_if_qobj(effect, widget)
     effect.setColor(color)
     widget.setGraphicsEffect(effect)
 
     sequence = QSequentialAnimationGroup(widget)
 
-    animation = QPropertyAnimation(effect, b'strength', widget)
+    animation = QPropertyAnimation(effect, b'strength')
+    __set_parent_if_qobj(animation, widget)
     animation.setDuration(duration)
     animation.setStartValue(0)
     animation.setEndValue(strength)
@@ -162,7 +171,8 @@ def colorize(widget, duration: int = 200, strength: float = 0.5, loop: int = 1, 
 
 def pulse(widget: QWidget, duration: int = 400, loop: int = 3, color: QColor = QColor(Qt.red),
           deletion=QPropertyAnimation.DeletionPolicy.KeepWhenStopped) -> QAbstractAnimation:
-    effect = QGraphicsDropShadowEffect(widget)
+    effect = QGraphicsDropShadowEffect()
+    __set_parent_if_qobj(effect, widget)
     effect.setBlurRadius(0)
     effect.setOffset(0)
     effect.setColor(color)
@@ -170,20 +180,23 @@ def pulse(widget: QWidget, duration: int = 400, loop: int = 3, color: QColor = Q
 
     parallel = QParallelAnimationGroup(widget)
 
-    shadow_animation = QPropertyAnimation(effect, b'blurRadius', widget)
+    shadow_animation = QPropertyAnimation(effect, b'blurRadius')
+    __set_parent_if_qobj(shadow_animation, widget)
     shadow_animation.setDuration(duration // 2)
     shadow_animation.setStartValue(0)
     shadow_animation.setEndValue(8)
 
     reverse_shadow_animation = reverse(shadow_animation)
 
-    shadow_sequence = QSequentialAnimationGroup(widget)
+    shadow_sequence = QSequentialAnimationGroup()
+    __set_parent_if_qobj(shadow_sequence, widget)
     shadow_sequence.addAnimation(shadow_animation)
     shadow_sequence.addAnimation(reverse_shadow_animation)
 
     original_size = widget.minimumSize()
 
-    size_animation = QPropertyAnimation(widget, b'minimumSize', widget)
+    size_animation = QPropertyAnimation(widget, b'minimumSize')
+    __set_parent_if_qobj(size_animation, widget)
     size_animation.setDuration(duration // 2)
     size_animation.setStartValue(widget.size())
     size = widget.size()
@@ -195,7 +208,8 @@ def pulse(widget: QWidget, duration: int = 400, loop: int = 3, color: QColor = Q
     reverse_size_animation.setStartValue(size)
     reverse_size_animation.setEndValue(original_size)
 
-    size_sequence = QSequentialAnimationGroup(widget)
+    size_sequence = QSequentialAnimationGroup()
+    __set_parent_if_qobj(size_sequence, widget)
     size_sequence.addAnimation(size_animation)
     size_sequence.addAnimation(reverse_size_animation)
 
@@ -204,7 +218,8 @@ def pulse(widget: QWidget, duration: int = 400, loop: int = 3, color: QColor = Q
     left_geo.setX(left_geo.x() - 2)
     left_geo.setY(left_geo.y() - 2)
 
-    position_animation = QPropertyAnimation(widget, b'geometry', widget)
+    position_animation = QPropertyAnimation(widget, b'geometry')
+    __set_parent_if_qobj(position_animation, widget)
     position_animation.setDuration(duration // 2)
     position_animation.setStartValue(original_geo)
     position_animation.setEndValue(left_geo)
@@ -213,7 +228,8 @@ def pulse(widget: QWidget, duration: int = 400, loop: int = 3, color: QColor = Q
     reverse_position_animation.setStartValue(left_geo)
     reverse_position_animation.setEndValue(original_geo)
 
-    position_sequence = QSequentialAnimationGroup(widget)
+    position_sequence = QSequentialAnimationGroup()
+    __set_parent_if_qobj(position_sequence, widget)
     position_sequence.addAnimation(position_animation)
     position_sequence.addAnimation(reverse_position_animation)
 
@@ -225,6 +241,11 @@ def pulse(widget: QWidget, duration: int = 400, loop: int = 3, color: QColor = Q
     parallel.start(deletion)
 
     return parallel
+
+
+def __set_parent_if_qobj(effect, widget):
+    if isinstance(widget, QObject):
+        effect.setParent(widget)
 
 # def shine(widget: QWidget) -> QAbstractAnimation:
 #     widget.setStyleSheet(f'''
