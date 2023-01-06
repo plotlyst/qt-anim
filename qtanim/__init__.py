@@ -3,7 +3,7 @@ from qtpy.QtCore import Qt, QRect, QSequentialAnimationGroup, QEasingCurve, QPar
     QAbstractAnimation
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QGraphicsColorizeEffect, QGraphicsOpacityEffect, QGraphicsDropShadowEffect
-from qtpy.QtWidgets import QWidget
+from qtpy.QtWidgets import QWidget, QGraphicsObject
 
 from qtanim.util import reverse
 
@@ -244,7 +244,7 @@ def pulse(widget: QWidget, duration: int = 400, loop: int = 3, color: QColor = Q
 
 
 def __set_parent_if_qobj(effect, widget):
-    if isinstance(widget, QObject):
+    if isinstance(widget, QObject) and not isinstance(widget, QGraphicsObject):
         effect.setParent(widget)
 
 # def shine(widget: QWidget) -> QAbstractAnimation:
