@@ -16,6 +16,7 @@ REQUIREMENTS: dict = {
         'pytest-cov==2.12.1',
     ],
     'dev': [
+        'qt-handy'
     ],
     'doc': [
     ],
