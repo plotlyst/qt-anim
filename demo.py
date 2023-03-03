@@ -1,6 +1,8 @@
 import sys
 
 import qtawesome
+from PyQt5.QtWidgets import QToolButton, QLabel, QFrame
+from qthandy import line, vbox
 from qtpy.QtCore import QPropertyAnimation
 from qtpy.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QVBoxLayout
 
@@ -29,6 +31,13 @@ class MainWindow(QMainWindow):
         self.btnColorize = QPushButton('Colorize')
         self.btnColorize.setIcon(qtawesome.icon('fa5s.cog'))
         self.btnPulse = QPushButton('Pulse')
+        self.btnToggle = QToolButton()
+        self.btnToggle.setCheckable(True)
+        self.wdgBar = QFrame()
+        self.wdgBar.setStyleSheet('.QFrame{ border: 1px solid black;}')
+        vbox(self.wdgBar)
+        self.wdgBar.layout().addWidget(QLabel('Menu 1'))
+        self.wdgBar.layout().addWidget(QLabel('Menu 2'))
 
         font = self.btnPlay.font()
         font.setBold(True)
@@ -42,6 +51,11 @@ class MainWindow(QMainWindow):
         self.widget.layout().addWidget(self.btnGlow)
         self.widget.layout().addWidget(self.btnColorize)
         self.widget.layout().addWidget(self.btnPulse)
+        self.widget.layout().addWidget(self.btnToggle)
+        self.widget.layout().addWidget(self.wdgBar)
+        self.wdgBar.setHidden(True)
+
+        self.widget.layout().addWidget(line())
 
         self.widget.layout().addWidget(self.btnPlay)
         self.widget.layout().addWidget(self.btnRevert)
@@ -53,9 +67,13 @@ class MainWindow(QMainWindow):
         self.btnGlow.clicked.connect(lambda: qtanim.glow(self.btnGlow))
         self.btnColorize.clicked.connect(lambda: qtanim.colorize(self.btnColorize, duration=1000, strength=0.8))
         self.btnPulse.clicked.connect(lambda: qtanim.animations.pulse(self.btnPulse))
+        self.btnToggle.toggled.connect(self.toggleMenu)
 
         self.btnPlay.clicked.connect(self._play)
         self.btnRevert.clicked.connect(lambda: qtanim.fade_in(self.btnFadeOut))
+
+    def toggleMenu(self, checked: bool):
+        qtanim.toggle_expansion(self.wdgBar, checked)
 
     def _play(self):
         # self.btnFlash.click()
@@ -65,6 +83,7 @@ class MainWindow(QMainWindow):
         self.btnGlow.click()
         self.btnColorize.click()
         self.btnPulse.click()
+        self.btnToggle.toggle()
 
 
 if __name__ == '__main__':

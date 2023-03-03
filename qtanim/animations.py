@@ -66,11 +66,51 @@ def shake(widget, distance: int = 5, loop: int = 3, deletion=None, teardown=None
     sequence.addAnimation(shake_animation)
     sequence.addAnimation(end_animation)
 
-    if deletion is None:
-        deletion = prop_anim_config.deletion_policy
     _start(sequence, deletion, teardown)
 
     return sequence
+
+
+def toggle_expansion(widget, toggle: bool, duration: int = 250, deletion=None, teardown=None) -> QAbstractAnimation:
+    def reset():
+        widget.setHidden(True)
+        widget.setGeometry(original)
+
+    animation = QPropertyAnimation(widget, b'geometry')
+    __set_parent_if_qobj(animation, widget)
+    if toggle:
+        widget.updateGeometry()
+        widget.setVisible(True)
+    else:
+        animation.finished.connect(reset)
+
+    original = widget.geometry()
+    first_geo: QRect = widget.geometry()
+    first_geo.setWidth(0)
+
+    animation.setDuration(duration)
+    if toggle:
+        animation.setEasingCurve(QEasingCurve.Type.InQuint)
+    else:
+        animation.setEasingCurve(QEasingCurve.Type.InOutQuint)
+    if toggle:
+        animation.setStartValue(first_geo)
+        animation.setEndValue(original)
+    else:
+        animation.setStartValue(original)
+        animation.setEndValue(first_geo)
+
+    _start(animation, deletion, teardown)
+
+    return animation
+
+
+def expand(widget, duration: int = 250, deletion=None, teardown=None) -> QAbstractAnimation:
+    return toggle_expansion(widget, True, duration, deletion, teardown)
+
+
+def collapse(widget, duration: int = 250, deletion=None, teardown=None) -> QAbstractAnimation:
+    return toggle_expansion(widget, False, duration, deletion, teardown)
 
 
 def fade_in(widget, duration: int = 250, deletion=None, teardown=None) -> QAbstractAnimation:
