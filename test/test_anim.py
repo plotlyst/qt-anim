@@ -1,6 +1,6 @@
 from qtpy.QtWidgets import QPushButton, QWidget, QHBoxLayout
 
-from qtanim import fade_in, fade_out, shake, flash, glow, pulse, colorize
+from qtanim import fade_in, fade_out, shake, glow, pulse, colorize
 
 
 def wait_for_finished(qtbot, anim, timeout: int = 3000):
@@ -35,13 +35,13 @@ def test_shake(qtbot):
     wait_for_finished(qtbot, anim, 10000)
 
 
-def test_flash(qtbot):
-    btn = QPushButton('Test button')
-    qtbot.addWidget(btn)
-    btn.show()
-
-    anim = flash(btn)
-    wait_for_finished(qtbot, anim)
+# def test_flash(qtbot):
+#     btn = QPushButton('Test button')
+#     qtbot.addWidget(btn)
+#     btn.show()
+#
+#     anim = flash(btn)
+#     wait_for_finished(qtbot, anim)
 
 
 def test_glow(qtbot):

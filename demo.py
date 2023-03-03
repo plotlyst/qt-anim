@@ -1,9 +1,11 @@
 import sys
 
 import qtawesome
+from PyQt5.QtCore import QPropertyAnimation
 from qtpy.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QVBoxLayout
 
 import qtanim
+from qtanim import prop_anim_config
 
 
 class MainWindow(QMainWindow):
@@ -15,8 +17,10 @@ class MainWindow(QMainWindow):
 
         self.widget.setLayout(QVBoxLayout())
 
-        self.btnFlash = QPushButton('Flash')
-        self.btnFlash.setIcon(qtawesome.icon('fa5s.cog'))
+        prop_anim_config.deletion_policy = QPropertyAnimation.DeletionPolicy.DeleteWhenStopped
+
+        # self.btnFlash = QPushButton('Flash')
+        # self.btnFlash.setIcon(qtawesome.icon('fa5s.cog'))
         self.btnShake = QPushButton('Shake')
         self.btnFadeIn = QPushButton('Fade in')
         self.btnFadeOut = QPushButton('Fade out')
@@ -31,7 +35,7 @@ class MainWindow(QMainWindow):
         self.btnPlay.setFont(font)
         self.btnRevert = QPushButton('Revert')
 
-        self.widget.layout().addWidget(self.btnFlash)
+        # self.widget.layout().addWidget(self.btnFlash)
         self.widget.layout().addWidget(self.btnShake)
         self.widget.layout().addWidget(self.btnFadeIn)
         self.widget.layout().addWidget(self.btnFadeOut)
@@ -42,7 +46,7 @@ class MainWindow(QMainWindow):
         self.widget.layout().addWidget(self.btnPlay)
         self.widget.layout().addWidget(self.btnRevert)
 
-        self.btnFlash.clicked.connect(lambda: qtanim.flash(self.btnFlash))
+        # self.btnFlash.clicked.connect(lambda: qtanim.flash(self.btnFlash))
         self.btnShake.clicked.connect(lambda: qtanim.shake(self.btnShake))
         self.btnFadeIn.clicked.connect(lambda: qtanim.fade_in(self.btnFadeIn))
         self.btnFadeOut.clicked.connect(lambda: qtanim.fade_out(self.btnFadeOut))

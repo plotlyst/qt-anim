@@ -18,20 +18,20 @@ class PropertyAnimationConfig:
 prop_anim_config = PropertyAnimationConfig()
 
 
-def flash(widget, start_color=QColor(Qt.blue), end_color: QColor = QColor(Qt.red), deletion=None) -> QAbstractAnimation:
-    effect = QGraphicsColorizeEffect(widget)
-    widget.setGraphicsEffect(effect)
-
-    animation = QPropertyAnimation(effect, b'color', widget)
-    animation.setLoopCount(5)
-    animation.setDuration(250)
-    animation.setStartValue(start_color)
-    animation.setEndValue(end_color)
-
-    _start(animation, deletion)
-    animation.finished.connect(lambda: widget.setGraphicsEffect(None))
-
-    return animation
+# def flash(widget, start_color=QColor(Qt.blue), end_color: QColor = QColor(Qt.red), deletion=None) -> QAbstractAnimation:
+#     effect = QGraphicsColorizeEffect(widget)
+#     widget.setGraphicsEffect(effect)
+#
+#     animation = QPropertyAnimation(effect, b'color', widget)
+#     animation.setLoopCount(5)
+#     animation.setDuration(250)
+#     animation.setStartValue(start_color)
+#     animation.setEndValue(end_color)
+#
+#     _start(animation, deletion)
+#     animation.finished.connect(lambda: widget.setGraphicsEffect(None))
+#
+#     return animation
 
 
 def shake(widget, distance: int = 5, loop: int = 3,
