@@ -34,8 +34,7 @@ prop_anim_config = PropertyAnimationConfig()
 #     return animation
 
 
-def shake(widget, distance: int = 5, loop: int = 3,
-          deletion=None) -> QAbstractAnimation:
+def shake(widget, distance: int = 5, loop: int = 3, deletion=None, teardown=None) -> QAbstractAnimation:
     original = widget.geometry()
     left_geo: QRect = widget.geometry()
     left_geo.setX(left_geo.x() - distance)
@@ -65,13 +64,12 @@ def shake(widget, distance: int = 5, loop: int = 3,
 
     if deletion is None:
         deletion = prop_anim_config.deletion_policy
-    sequence.start(deletion)
+    _start(sequence, deletion, teardown)
 
     return sequence
 
 
-def fade_in(widget, duration: int = 250,
-            deletion=None) -> QAbstractAnimation:
+def fade_in(widget, duration: int = 250, deletion=None, teardown=None) -> QAbstractAnimation:
     effect = QGraphicsOpacityEffect()
     __set_parent_if_qobj(effect, widget)
 
@@ -84,13 +82,13 @@ def fade_in(widget, duration: int = 250,
     animation.setStartValue(0)
     animation.setEndValue(1)
     animation.setEasingCurve(QEasingCurve.Type.InBack)
-    _start(animation, deletion)
+    _start(animation, deletion, teardown)
 
     return animation
 
 
-def fade_out(widget, duration: int = 250, hide_if_finished: bool = True,
-             deletion=None) -> QAbstractAnimation:
+def fade_out(widget, duration: int = 250, hide_if_finished: bool = True, deletion=None,
+             teardown=None) -> QAbstractAnimation:
     effect = QGraphicsOpacityEffect()
     __set_parent_if_qobj(effect, widget)
     widget.setGraphicsEffect(effect)
@@ -103,13 +101,13 @@ def fade_out(widget, duration: int = 250, hide_if_finished: bool = True,
 
     if hide_if_finished:
         animation.finished.connect(lambda: widget.setHidden(True))
-    _start(animation, deletion)
+    _start(animation, deletion, teardown)
 
     return animation
 
 
 def glow(widget, duration: int = 200, radius: int = 8, loop: int = 1,
-         color=QColor(Qt.red), deletion=None) -> QAbstractAnimation:
+         color=QColor(Qt.red), deletion=None, teardown=None) -> QAbstractAnimation:
     effect = QGraphicsDropShadowEffect()
     __set_parent_if_qobj(effect, widget)
     effect.setBlurRadius(0)
@@ -131,13 +129,13 @@ def glow(widget, duration: int = 200, radius: int = 8, loop: int = 1,
     sequence.addAnimation(end_animation)
     sequence.setLoopCount(loop)
 
-    _start(sequence, deletion)
+    _start(sequence, deletion, teardown)
 
     return sequence
 
 
 def colorize(widget, duration: int = 200, strength: float = 0.5, loop: int = 1, color=QColor(Qt.red),
-             deletion=None) -> QAbstractAnimation:
+             deletion=None, teardown=None) -> QAbstractAnimation:
     effect = QGraphicsColorizeEffect()
     __set_parent_if_qobj(effect, widget)
     effect.setColor(color)
@@ -157,7 +155,7 @@ def colorize(widget, duration: int = 200, strength: float = 0.5, loop: int = 1, 
     sequence.addAnimation(end_animation)
     sequence.setLoopCount(loop)
 
-    _start(sequence, deletion)
+    _start(sequence, deletion, teardown)
 
     return sequence
 
@@ -179,7 +177,7 @@ def colorize(widget, duration: int = 200, strength: float = 0.5, loop: int = 1, 
 
 
 def pulse(widget, duration: int = 400, loop: int = 3, color=QColor(Qt.red),
-          deletion=None) -> QAbstractAnimation:
+          deletion=None, teardown=None) -> QAbstractAnimation:
     effect = QGraphicsDropShadowEffect()
     __set_parent_if_qobj(effect, widget)
     effect.setBlurRadius(0)
@@ -247,15 +245,16 @@ def pulse(widget, duration: int = 400, loop: int = 3, color=QColor(Qt.red),
     parallel.addAnimation(position_sequence)
     parallel.setLoopCount(loop)
 
-    _start(parallel, deletion)
+    _start(parallel, deletion, teardown)
 
     return parallel
 
 
-def _start(anim: QAbstractAnimation, deletion):
+def _start(anim: QAbstractAnimation, deletion, teardown):
     if deletion is None:
         deletion = prop_anim_config.deletion_policy
-    print(deletion)
+    if teardown is not None:
+        anim.finished.connect(lambda: teardown())
     anim.start(deletion)
 
 

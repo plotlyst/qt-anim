@@ -52,13 +52,13 @@ class MainWindow(QMainWindow):
         self.btnFadeOut.clicked.connect(lambda: qtanim.fade_out(self.btnFadeOut))
         self.btnGlow.clicked.connect(lambda: qtanim.glow(self.btnGlow))
         self.btnColorize.clicked.connect(lambda: qtanim.colorize(self.btnColorize, duration=1000, strength=0.8))
-        self.btnPulse.clicked.connect(lambda: qtanim.pulse(self.btnPulse))
+        self.btnPulse.clicked.connect(lambda: qtanim.animations.pulse(self.btnPulse))
 
         self.btnPlay.clicked.connect(self._play)
         self.btnRevert.clicked.connect(lambda: qtanim.fade_in(self.btnFadeOut))
 
     def _play(self):
-        self.btnFlash.click()
+        # self.btnFlash.click()
         self.btnShake.click()
         self.btnFadeIn.click()
         self.btnFadeOut.click()
