@@ -1,7 +1,7 @@
 import sys
 
 import qtawesome
-from PyQt5.QtCore import QPropertyAnimation
+from qtpy.QtCore import QPropertyAnimation
 from qtpy.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QVBoxLayout
 
 import qtanim
