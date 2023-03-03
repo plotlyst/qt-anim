@@ -3,12 +3,12 @@ from qtpy.QtCore import Qt, QRect, QSequentialAnimationGroup, QEasingCurve, QPar
     QAbstractAnimation
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QGraphicsColorizeEffect, QGraphicsOpacityEffect, QGraphicsDropShadowEffect
-from qtpy.QtWidgets import QWidget, QGraphicsObject
+from qtpy.QtWidgets import QGraphicsObject
 
 from qtanim.util import reverse
 
 
-def flash(widget: QWidget, start_color: QColor = QColor(Qt.blue),
+def flash(widget, start_color=QColor(Qt.blue),
           end_color: QColor = QColor(Qt.red),
           deletion=QPropertyAnimation.DeletionPolicy.KeepWhenStopped) -> QAbstractAnimation:
     effect = QGraphicsColorizeEffect(widget)
@@ -26,7 +26,7 @@ def flash(widget: QWidget, start_color: QColor = QColor(Qt.blue),
     return animation
 
 
-def shake(widget: QWidget, distance: int = 5, loop: int = 3,
+def shake(widget, distance: int = 5, loop: int = 3,
           deletion=QPropertyAnimation.DeletionPolicy.KeepWhenStopped) -> QAbstractAnimation:
     original = widget.geometry()
     left_geo: QRect = widget.geometry()
@@ -60,7 +60,7 @@ def shake(widget: QWidget, distance: int = 5, loop: int = 3,
     return sequence
 
 
-def fade_in(widget: QWidget, duration: int = 250,
+def fade_in(widget, duration: int = 250,
             deletion=QPropertyAnimation.DeletionPolicy.KeepWhenStopped) -> QAbstractAnimation:
     effect = QGraphicsOpacityEffect()
     __set_parent_if_qobj(effect, widget)
@@ -79,7 +79,7 @@ def fade_in(widget: QWidget, duration: int = 250,
     return animation
 
 
-def fade_out(widget: QWidget, duration: int = 250, hide_if_finished: bool = True,
+def fade_out(widget, duration: int = 250, hide_if_finished: bool = True,
              deletion=QPropertyAnimation.DeletionPolicy.KeepWhenStopped) -> QAbstractAnimation:
     effect = QGraphicsOpacityEffect()
     __set_parent_if_qobj(effect, widget)
@@ -98,8 +98,8 @@ def fade_out(widget: QWidget, duration: int = 250, hide_if_finished: bool = True
     return animation
 
 
-def glow(widget: QWidget, duration: int = 200, radius: int = 8, loop: int = 1,
-         color: QColor = QColor(Qt.red),
+def glow(widget, duration: int = 200, radius: int = 8, loop: int = 1,
+         color=QColor(Qt.red),
          deletion=QPropertyAnimation.DeletionPolicy.KeepWhenStopped) -> QAbstractAnimation:
     effect = QGraphicsDropShadowEffect()
     __set_parent_if_qobj(effect, widget)
@@ -127,7 +127,7 @@ def glow(widget: QWidget, duration: int = 200, radius: int = 8, loop: int = 1,
     return sequence
 
 
-def colorize(widget, duration: int = 200, strength: float = 0.5, loop: int = 1, color: QColor = QColor(Qt.red),
+def colorize(widget, duration: int = 200, strength: float = 0.5, loop: int = 1, color=QColor(Qt.red),
              deletion=QPropertyAnimation.DeletionPolicy.KeepWhenStopped) -> QAbstractAnimation:
     effect = QGraphicsColorizeEffect()
     __set_parent_if_qobj(effect, widget)
@@ -169,7 +169,7 @@ def colorize(widget, duration: int = 200, strength: float = 0.5, loop: int = 1, 
 #         self.widget.setPalette(self.palette)
 
 
-def pulse(widget: QWidget, duration: int = 400, loop: int = 3, color: QColor = QColor(Qt.red),
+def pulse(widget, duration: int = 400, loop: int = 3, color=QColor(Qt.red),
           deletion=QPropertyAnimation.DeletionPolicy.KeepWhenStopped) -> QAbstractAnimation:
     effect = QGraphicsDropShadowEffect()
     __set_parent_if_qobj(effect, widget)
