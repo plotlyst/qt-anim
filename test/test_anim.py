@@ -1,6 +1,7 @@
 from qtpy.QtWidgets import QPushButton, QWidget, QHBoxLayout
 
-from qtanim import fade_in, fade_out, shake, glow, pulse, colorize
+from qtanim import fade_in, fade_out, shake, glow, colorize
+from qtanim.animations import pulse
 
 
 def wait_for_finished(qtbot, anim, timeout: int = 3000):
