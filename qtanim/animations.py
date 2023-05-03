@@ -2,10 +2,10 @@ from dataclasses import dataclass
 
 from qtpy.QtCore import QPropertyAnimation, QObject
 from qtpy.QtCore import Qt, QRect, QSequentialAnimationGroup, QEasingCurve, QParallelAnimationGroup, \
-    QAbstractAnimation
+    QAbstractAnimation, QVariantAnimation
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QGraphicsColorizeEffect, QGraphicsOpacityEffect, QGraphicsDropShadowEffect
-from qtpy.QtWidgets import QGraphicsObject
+from qtpy.QtWidgets import QGraphicsObject, QWidget
 
 from qtanim.util import reverse
 
@@ -71,34 +71,39 @@ def shake(widget, distance: int = 5, loop: int = 3, deletion=None, teardown=None
     return sequence
 
 
-def toggle_expansion(widget, toggle: bool, duration: int = 250, deletion=None, teardown=None) -> QAbstractAnimation:
-    def reset():
-        widget.setHidden(True)
-        widget.setGeometry(original)
+def toggle_expansion(widget: QWidget, toggle: bool, duration: int = 250, deletion=None,
+                     teardown=None) -> QAbstractAnimation:
+    def reset(hidden: bool):
+        if hidden:
+            widget.setHidden(True)
+        # widget.setGeometry(original)
+        widget.setMaximumWidth(65000)
 
-    animation = QPropertyAnimation(widget, b'geometry')
+    def changed(value: int):
+        widget.setMaximumWidth(value)
+
+    animation = QVariantAnimation(widget)
     __set_parent_if_qobj(animation, widget)
-    if toggle:
-        widget.updateGeometry()
-        widget.setVisible(True)
-    else:
-        animation.finished.connect(reset)
-
-    original = widget.geometry()
-    first_geo: QRect = widget.geometry()
-    first_geo.setWidth(0)
-
     animation.setDuration(duration)
+
     if toggle:
+        widget.setEnabled(True)
+        widget.setMaximumWidth(1)
+        widget.setVisible(True)
+
         animation.setEasingCurve(QEasingCurve.Type.InQuint)
+        animation.setStartValue(1)
+        animation.setEndValue(widget.sizeHint().width())
+        animation.finished.connect(lambda: reset(hidden=False))
     else:
+        widget.setDisabled(True)
+
         animation.setEasingCurve(QEasingCurve.Type.InOutQuint)
-    if toggle:
-        animation.setStartValue(first_geo)
-        animation.setEndValue(original)
-    else:
-        animation.setStartValue(original)
-        animation.setEndValue(first_geo)
+        animation.setStartValue(widget.width())
+        animation.setEndValue(0)
+        animation.finished.connect(lambda: reset(hidden=True))
+
+    animation.valueChanged.connect(changed)
 
     _start(animation, deletion, teardown)
 
