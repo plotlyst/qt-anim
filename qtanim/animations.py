@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional
 
 from qtpy.QtCore import QPropertyAnimation, QObject
 from qtpy.QtCore import Qt, QRect, QSequentialAnimationGroup, QEasingCurve, QParallelAnimationGroup, \
@@ -73,11 +74,11 @@ def shake(widget, distance: int = 5, loop: int = 3, deletion=None, teardown=None
 
 def toggle_expansion(widget: QWidget, toggle: bool, duration: int = 250, deletion=None,
                      teardown=None) -> QAbstractAnimation:
-    def reset(hidden: bool):
+    def reset(hidden: bool, defaultSize: Optional[int] = None):
         if hidden:
             widget.setHidden(True)
-        # widget.setGeometry(original)
-        widget.setMaximumWidth(65000)
+        if defaultSize is not None:
+            widget.setMaximumWidth(defaultSize)
 
     def changed(value: int):
         widget.setMaximumWidth(value)
@@ -94,7 +95,7 @@ def toggle_expansion(widget: QWidget, toggle: bool, duration: int = 250, deletio
         animation.setEasingCurve(QEasingCurve.Type.InQuint)
         animation.setStartValue(1)
         animation.setEndValue(widget.sizeHint().width())
-        animation.finished.connect(lambda: reset(hidden=False))
+        animation.finished.connect(lambda: reset(hidden=False, defaultSize=widget.maximumWidth()))
     else:
         widget.setDisabled(True)
 
