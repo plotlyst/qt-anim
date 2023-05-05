@@ -87,6 +87,8 @@ def toggle_expansion(widget: QWidget, toggle: bool, duration: int = 250, deletio
     __set_parent_if_qobj(animation, widget)
     animation.setDuration(duration)
 
+    defaultMaxWidth = widget.maximumWidth()
+
     if toggle:
         widget.setEnabled(True)
         widget.setMaximumWidth(1)
@@ -95,14 +97,14 @@ def toggle_expansion(widget: QWidget, toggle: bool, duration: int = 250, deletio
         animation.setEasingCurve(QEasingCurve.Type.InQuint)
         animation.setStartValue(1)
         animation.setEndValue(widget.sizeHint().width())
-        animation.finished.connect(lambda: reset(hidden=False, defaultSize=widget.maximumWidth()))
+        animation.finished.connect(lambda: reset(hidden=False, defaultSize=defaultMaxWidth))
     else:
         widget.setDisabled(True)
 
         animation.setEasingCurve(QEasingCurve.Type.InOutQuint)
         animation.setStartValue(widget.width())
         animation.setEndValue(0)
-        animation.finished.connect(lambda: reset(hidden=True))
+        animation.finished.connect(lambda: reset(hidden=True, defaultSize=defaultMaxWidth))
 
     animation.valueChanged.connect(changed)
 
