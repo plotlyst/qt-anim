@@ -96,7 +96,10 @@ def toggle_expansion(widget: QWidget, toggle: bool, duration: int = 250, deletio
 
         animation.setEasingCurve(QEasingCurve.Type.InQuint)
         animation.setStartValue(1)
-        animation.setEndValue(widget.sizeHint().width())
+        if defaultMaxWidth:
+            animation.setEndValue(min([defaultMaxWidth, widget.sizeHint().width()]))
+        else:
+            animation.setEndValue(widget.sizeHint().width())
         animation.finished.connect(lambda: reset(hidden=False, defaultSize=defaultMaxWidth))
     else:
         widget.setDisabled(True)
