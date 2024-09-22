@@ -170,7 +170,8 @@ def glow(widget, duration: int = 200, radius: int = 8, loop: int = 1,
     effect.setColor(color)
     widget.setGraphicsEffect(effect)
 
-    sequence = QSequentialAnimationGroup(widget)
+    sequence = QSequentialAnimationGroup()
+    __set_parent_if_qobj(sequence, widget)
 
     animation = QPropertyAnimation(effect, b'blurRadius')
     __set_parent_if_qobj(animation, widget)
