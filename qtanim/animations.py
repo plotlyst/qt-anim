@@ -162,32 +162,35 @@ def fade_out(widget, duration: int = 250, hide_if_finished: bool = True, deletio
 
 
 def glow(widget, duration: int = 200, radius: int = 8, loop: int = 1,
-         color=QColor(Qt.red), deletion=None, teardown=None) -> QAbstractAnimation:
+         color=QColor(Qt.red), deletion=None, startRadius: int = 0, reverseAnimation: bool = True, teardown=None) -> QAbstractAnimation:
     effect = QGraphicsDropShadowEffect()
     __set_parent_if_qobj(effect, widget)
-    effect.setBlurRadius(0)
+    effect.setBlurRadius(startRadius)
     effect.setOffset(0)
     effect.setColor(color)
     widget.setGraphicsEffect(effect)
 
-    sequence = QSequentialAnimationGroup()
-    __set_parent_if_qobj(sequence, widget)
-
     animation = QPropertyAnimation(effect, b'blurRadius')
     __set_parent_if_qobj(animation, widget)
     animation.setDuration(duration)
-    animation.setStartValue(0)
+    animation.setStartValue(startRadius)
     animation.setEndValue(radius)
 
-    end_animation = reverse(animation)
+    if reverseAnimation:
+        sequence = QSequentialAnimationGroup()
+        __set_parent_if_qobj(sequence, widget)
 
-    sequence.addAnimation(animation)
-    sequence.addAnimation(end_animation)
-    sequence.setLoopCount(loop)
+        end_animation = reverse(animation)
 
-    _start(sequence, deletion, teardown)
+        sequence.addAnimation(animation)
+        sequence.addAnimation(end_animation)
+        sequence.setLoopCount(loop)
 
-    return sequence
+        _start(sequence, deletion, teardown)
+        return sequence
+    else:
+        _start(animation, deletion, teardown)
+        return animation
 
 
 def colorize(widget, duration: int = 200, strength: float = 0.5, loop: int = 1, color=QColor(Qt.red),

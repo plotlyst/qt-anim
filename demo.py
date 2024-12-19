@@ -1,7 +1,7 @@
 import sys
 
 import qtawesome
-from PyQt5.QtWidgets import QToolButton, QLabel, QFrame
+from PyQt6.QtWidgets import QToolButton, QLabel, QFrame
 from qthandy import line, vbox
 from qtpy.QtCore import QPropertyAnimation
 from qtpy.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QVBoxLayout
