@@ -194,29 +194,30 @@ def glow(widget, duration: int = 200, radius: int = 8, loop: int = 1,
 
 
 def colorize(widget, duration: int = 200, strength: float = 0.5, loop: int = 1, color=QColor(Qt.red),
-             deletion=None, teardown=None) -> QAbstractAnimation:
+             deletion=None, reverseAnimation: bool = True, startStrength: float = 0.0, teardown=None) -> QAbstractAnimation:
     effect = QGraphicsColorizeEffect()
     __set_parent_if_qobj(effect, widget)
     effect.setColor(color)
     widget.setGraphicsEffect(effect)
 
-    sequence = QSequentialAnimationGroup(widget)
-
     animation = QPropertyAnimation(effect, b'strength')
     __set_parent_if_qobj(animation, widget)
     animation.setDuration(duration)
-    animation.setStartValue(0)
+    animation.setStartValue(startStrength)
     animation.setEndValue(strength)
+    if reverseAnimation:
+        sequence = QSequentialAnimationGroup(widget)
+        end_animation = reverse(animation)
 
-    end_animation = reverse(animation)
+        sequence.addAnimation(animation)
+        sequence.addAnimation(end_animation)
+        sequence.setLoopCount(loop)
 
-    sequence.addAnimation(animation)
-    sequence.addAnimation(end_animation)
-    sequence.setLoopCount(loop)
-
-    _start(sequence, deletion, teardown)
-
-    return sequence
+        _start(sequence, deletion, teardown)
+        return sequence
+    else:
+        _start(animation, deletion, teardown)
+        return animation
 
 
 # class PaletteColorInterpolation(QWidget):
